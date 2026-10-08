@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DATA INPUT GAS RIAN</title>
+<style>
+:root{--green:#18b84b;--green2:#0b8f37;--bg:#f3fff6;--red:#e53935;--dark:#202520}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+header{background:linear-gradient(135deg,#19c653,#078b35);color:#fff;padding:16px;text-align:center;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #0002}
+h1{font-size:20px;margin:0;font-weight:800}.sub{font-size:12px;margin-top:4px;opacity:.9}
+nav{display:flex;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:71px;z-index:4}
+nav button{flex:1;border:0;background:#fff;padding:13px 4px;font-weight:700;font-size:12px;color:#555}
+nav button.active{color:var(--green2);border-bottom:3px solid var(--green)}
+main{padding:12px;max-width:1000px;margin:auto}.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px #00000012}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:120px}
+select,input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:14px}
+button.action{border:0;border-radius:8px;padding:10px 13px;font-weight:700;cursor:pointer}
+.primary{background:var(--green);color:#fff}.secondary{background:#eee;color:#222}.danger{background:#e53935;color:#fff}
+.member{border:1px solid #ddd;border-radius:10px;padding:10px;margin:7px 0;background:#fff}
+.member.marked{background:#bfe3ff;border-color:#168bd1}
+.member .top{display:flex;justify-content:space-between;gap:8px}.name{font-weight:800}.nik{font-size:12px;color:#666}
+.status{font-weight:800;padding:3px 7px;border-radius:999px;font-size:10px}.s1{background:#e4f7ea;color:#159447}.s0{background:#fff8cf;color:#b69a00}.se{background:#ffe3e3;color:#d62929}.sb{background:#eee;color:#555}
+.buttons{display:flex;gap:6px;margin-top:8px}.buttons button{flex:1;border-radius:7px;padding:8px 4px;font-weight:800}.bisa{color:#159447;background:#fff;border:1px solid #9bd8b2}.penuh{color:#c7a400;background:#fff;border:1px solid #e6d36a}.error{color:#d62929;background:#fff;border:1px solid #e6a0a0}.clear{color:#555;background:#fff;border:1px solid #bbb}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:7px;text-align:center}th{background:#e9f8ed}
+.small{font-size:12px;color:#666}.hidden{display:none}.toast{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 15px;border-radius:8px;z-index:20;display:none}
+@media(min-width:700px){.member{display:grid;grid-template-columns:1fr 160px 360px;align-items:center;gap:10px}.member .buttons{margin:0}}
+@media print{
+  body{background:#fff!important;margin:0!important}nav,header,.no-print,main>section:not(#print),#print>.card{display:none!important}
+  #print{display:block!important}
+  .print-only{display:block!important}
+  .print-sheet{page-break-after:always;break-after:page;width:100%;margin:0;padding:0}
+  .print-sheet:last-child{page-break-after:auto;break-after:auto}
+}
+.print-only{display:none}
+.print-preview{overflow-x:auto;background:#f3f5f3;padding:10px}
+.print-sheet{background:#fff;margin:0 auto 16px;padding:10px;box-sizing:border-box}
+.print-title{text-align:center;font-weight:800;font-size:16px;margin-bottom:6px}
+.print-meta{font-size:10px;line-height:1.45;margin-bottom:5px}
+.print-grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:8px}
+.print-grid th,.print-grid td{border:1px solid #222;text-align:center;padding:2px 1px;height:18px;box-sizing:border-box}
+.print-grid .left{text-align:left}
+.print-grid .no{width:28px}
+.print-grid .name{width:115px}
+.print-grid .nik{width:105px}
+.print-grid .cat{width:35px}
+.print-grid .day{width:22px}
+.print-check{font-size:11px;font-weight:800}
+@media screen{.print-grid{min-width:1050px}}
+
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #ddd;border-radius:10px}
+.input-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.input-table th,.input-table td{border-right:1px solid #ddd;border-bottom:1px solid #ddd;padding:6px 5px;white-space:nowrap;text-align:center;background:#fff}
+.input-table th{position:sticky;top:0;z-index:2;background:#e9f8ed;font-weight:800}
+.input-table .left{text-align:left}
+.input-table .no{position:sticky;left:0;z-index:3;background:#fff;min-width:42px}
+.input-table th.no{background:#e9f8ed}
+.input-table .nama{min-width:155px}
+.input-table .nik{min-width:145px}
+.input-table .copy{min-width:60px}
+.input-table .jml{min-width:48px;font-weight:800}
+.copybtn{border:1px solid #c8c8c8;background:#f7f7f7;border-radius:6px;padding:6px 8px;font-weight:800;font-size:11px}
+.statusbtn{border:1px solid #ccc;border-radius:6px;padding:6px 8px;font-weight:900;background:#fff;min-width:52px;font-size:11px}
+.statusbtn.bisa{color:#159447;border-color:#9bd8b2}
+.statusbtn.penuh{color:#c7a400;border-color:#e6d36a}
+.statusbtn.error{color:#d62929;border-color:#e6a0a0}
+.statusbtn.batal{color:#555;border-color:#bbb}
+.pagebar{display:grid;grid-template-columns:repeat(13,1fr);gap:5px;padding:7px 0 9px;background:var(--bg);z-index:3}
+.pagebar button{border:1px solid #b9d8c1;background:#fff;border-radius:9px;padding:7px 2px;font-weight:900;font-size:11px;color:#27733e;box-shadow:0 1px 3px #0001;transition:transform .12s ease,box-shadow .12s ease}
+.pagebar button.active{background:linear-gradient(135deg,#19c653,#078b35);color:#fff;border-color:#078b35;box-shadow:0 2px 5px #078b3540;transform:scale(1.16);z-index:2}
+.pagebar button.marked-page{background:#2196f3;color:#fff;border-color:#1976d2;box-shadow:0 2px 5px #1976d244}
+.pagebar button.active.marked-page{background:#1687e8;color:#fff;border-color:#0d6fbe;transform:scale(1.18);box-shadow:0 3px 7px #1976d266}
+.calendar-wrap{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0 10px}.calendar-wrap input{padding:8px 10px;border:1px solid #bbb;border-radius:8px;font-size:13px;font-weight:700}.datebar{display:flex;gap:5px;overflow-x:auto;padding:4px 0 9px}
+.datebar button{border:1px solid #ccc;background:#fff;border-radius:7px;padding:7px 10px;font-weight:700;flex:0 0 auto}
+.datebar button.active{background:#19c653;color:#fff;border-color:#19c653}
+.current-cell{outline:2px solid #19c653;outline-offset:-2px}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+
+.page-mark-notice{margin:2px 0 4px;padding:7px 10px;border-radius:9px;background:#eaf4ff;border:1px solid #9bc7f5;color:#155a96;text-align:center;font-weight:800;font-size:12px;min-height:18px}
+.page-mark-notice:empty{display:none}
+</style>
+<style>
+.input-table-wrap{margin-top:8px;overflow-x:auto;overflow-y:visible;width:100%;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+.input-table{width:max-content;min-width:820px;table-layout:auto;border-collapse:collapse;font-size:12px}
+.input-table th,.input-table td{border:1px solid #ddd;padding:6px 5px;text-align:center;white-space:nowrap}
+.input-table th{background:#e9f8ed;font-weight:800}
+.input-table td.left{text-align:left}
+.input-table .sticky-no{width:38px;min-width:38px}.input-table th:nth-child(2),.input-table td:nth-child(2){min-width:150px}.input-table th:nth-child(3),.input-table td:nth-child(3){min-width:150px}.input-table th:nth-child(4),.input-table td:nth-child(4){min-width:410px}.input-table th:nth-child(5),.input-table td:nth-child(5){min-width:45px}
+.input-table .mini-btn,.input-table .mini-status{border-radius:7px;padding:10px 8px;font-size:11px;font-weight:900;background:#fff;cursor:pointer;min-height:40px}
+.input-table .mini-btn{border:1px solid #bbb;color:#444}
+.input-table .mini-status{border:1px solid currentColor}
+.input-table .mini-status.bisa{color:#159447}
+.input-table .mini-status.penuh{color:#c7a400}
+.input-table .mini-status.error{color:#d62929}
+.nik-copy{border:1px solid #b9d8c1;background:#f7fff9;border-radius:7px;padding:8px 10px;font:inherit;color:#333;cursor:pointer;text-align:center;min-width:145px;display:inline-block}.nik-copy:active{background:#dff5e5}.show-help{display:block;padding:8px 10px;border-radius:8px;background:#f0fff4;border:1px solid #9bd8b2;color:#0b8f37;line-height:1.35}
+.copy-nik{border:1px solid #168b43;background:#fff;color:#168b43;border-radius:7px;padding:8px 12px;font-weight:900;font-size:12px;cursor:pointer;min-width:70px}
+.three-actions{display:flex;gap:8px;justify-content:center;width:max-content;min-width:400px}
+.three-actions .mini-status{min-width:88px;flex:0 0 88px}.three-actions .mini-status:disabled{opacity:.35;cursor:not-allowed;background:#f3f3f3}.three-actions .mini-status.active{font-weight:900;box-shadow:inset 0 0 0 2px currentColor;color:#fff}.three-actions .mini-status.bisa.active{background:#18b84b;border-color:#18b84b}.three-actions .mini-status.penuh.active{background:#d4b000;border-color:#d4b000}.three-actions .mini-status.error.active{background:#d62929;border-color:#d62929}.three-actions .mini-status.batal{color:#555;border-color:#aaa}.three-actions .mini-status.batal:hover{background:#eee}
+.input-table tr.marked-row td{background:#bfe3ff}
+.input-table tr.marked-row .sticky-no{background:#bfe3ff}
+
+.input-table th:nth-child(2),.input-table td:nth-child(2){min-width:150px;width:150px}
+.input-table th:nth-child(3),.input-table td:nth-child(3){min-width:150px;width:150px}
+.input-table th:nth-child(4),.input-table td:nth-child(4){min-width:410px;width:410px}
+.input-table th:nth-child(5),.input-table td:nth-child(5){min-width:45px;width:45px}
+.next-input{margin-top:7px;font-size:11px;font-weight:800;color:#0b8f37;text-align:left}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+<style>
+.action-help{font-size:12px!important;line-height:1.25!important;font-weight:600!important;margin-top:5px!important;padding:5px 8px!important;text-align:center!important}
+.rekap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}.rekap-stat.can-input{grid-column:1/-1;background:#f0faf3;border:1px solid #b9ddc5;padding:10px 8px;border-radius:9px}.rekap-stat.can-input b{font-size:13px}.rekap-stat.can-input strong{font-size:28px;margin-top:3px}.rekap-stat.can-input span{font-size:11px;line-height:1.35;margin-top:4px}.rekap-stat{border:1px solid #ddd;border-radius:8px;background:#fff;padding:7px 5px;text-align:center}.rekap-stat b{display:block;font-size:11px}.rekap-stat strong{font-size:18px;display:block;margin-top:2px}.rekap-title{text-align:center;font-weight:900;font-size:13px;margin:8px 0}.rekap-table-wrap{overflow-x:auto}.rekap-table{min-width:620px;border-collapse:collapse;font-size:12px}.rekap-table th,.rekap-table td{border:1px solid #ddd;padding:7px;text-align:center}.rekap-table th{background:#e9f8ed}.rekap-table td.nama{text-align:left;min-width:150px}.rekap-table td.nik{min-width:140px;color:#222;font-size:12px}.datebar .active{background:#19c653!important;color:#fff!important;border-color:#19c653!important}
+
+.rekap-stat span{display:block;font-size:9px;color:#777;margin-top:1px}.recap-filter{display:flex;justify-content:center;gap:7px;margin:8px 0}.recap-filter button{border:1px solid #bbb;background:#fff;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:800;cursor:pointer}.recap-filter button.active{color:#fff}.recap-filter button[data-value="1"].active{background:#18b84b;border-color:#18b84b}.recap-filter button[data-value="0"].active{background:#d4b000;border-color:#d4b000}.recap-filter button[data-value="-"].active{background:#d62929;border-color:#d62929}
+
+.mark-summary{font-size:12px;text-align:center;margin:8px 0;font-weight:700}.mark-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}.mark-table{width:max-content;min-width:100%;border-collapse:collapse;font-size:12px}.mark-table th,.mark-table td{border:1px solid #ddd;padding:7px 8px;text-align:center;white-space:nowrap}.mark-table th{background:#e9f8ed}.mark-table td.name{text-align:left;min-width:150px}.mark-table td.nik{min-width:145px;color:#222;font-size:12px}.mark-table .markbtn{border:1px solid #168bd1;background:#fff;border-radius:7px;padding:8px 10px;font-weight:800;color:#1677ad}.mark-table .cancelbtn{border:1px solid #aaa;background:#fff;border-radius:7px;padding:8px 10px;font-weight:800;color:#555}.mark-table .editbtn{border:1px solid #c8c8c8;background:#fff;border-radius:7px;padding:8px 10px;font-weight:800}.mark-table tr.marked td{background:#bfe3ff}.mark-table .page-cell{font-weight:800;color:#27733e}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="action-below-nik">
+.nik-actions-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.nik-actions-wrap .nik{display:block;text-align:center}
+.nik-actions{display:flex;justify-content:center;gap:5px;flex-wrap:wrap}
+.nik-actions button{min-width:68px}
+.manual-actions{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:5px}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+
+<style id="all-actions-under-nik">
+/* Semua tombol aksi berada di bawah NIK */
+td .nik, .nik { display:block !important; text-align:center !important; }
+td .action, td .actions, td .btns, td .button-group,
+.nik-actions, .manual-actions {
+  display:flex !important;
+  flex-direction:row !important;
+  justify-content:center !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  width:100% !important;
+  margin-top:7px !important;
+}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="requested-layout">
+/* Aksi selalu berada tepat di bawah NIK */
+.nik-cell{vertical-align:top!important}
+.nik-cell .nik{display:block!important;text-align:center!important}
+.nik-cell .actions,.nik-cell .action-buttons,.nik-cell .nik-actions{
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ flex-wrap:wrap!important;gap:6px!important;margin-top:7px!important;
+}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="stack-actions-final">
+/* Paksa tombol aksi tampil di baris bawah NIK */
+td .nik-cell, .nik-cell{display:flex!important;flex-direction:column!important;align-items:center!important}
+td .nik-cell .nik, .nik-cell .nik{display:block!important;width:100%!important;text-align:center!important}
+td .nik-cell .actions, td .nik-cell .action-buttons, td .nik-cell .nik-actions,
+td .actions-under-nik{
+ display:flex!important;flex-direction:row!important;justify-content:center!important;
+ align-items:center!important;gap:6px!important;width:100%!important;margin-top:6px!important;
+}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="force-nik-action-row">
+.nik-stack{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important}
+.nik-stack .nik-text{display:block!important;width:100%!important;text-align:center!important}
+.nik-stack .under-actions{display:flex!important;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:6px!important;width:100%!important;margin-top:6px!important}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="one-box-layout">
+.person-list{display:flex;flex-direction:column;gap:8px}
+.person-box{border:1px solid #d7e0d8;border-radius:12px;padding:8px 10px;background:#fff}
+.person-box.marked-row{background:#b9dcff}
+.person-box.status-penuh{background:#fff3a6;border-color:#e2c84a}
+.person-box.status-error{background:#ffd0d0;border-color:#e36a6a}
+.person-box.marked-row.status-penuh{background:#fff3a6;border-color:#e2c84a}.person-box.marked-row.status-error{background:#ffd0d0;border-color:#e36a6a}
+.person-head{display:grid;grid-template-columns:42px minmax(90px,1fr) minmax(125px,1.3fr) 42px;align-items:center;gap:6px}
+.person-no{text-align:center;font-weight:700}
+.person-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person-nik{text-align:center}
+.person-nik .nik-copy{cursor:pointer;text-decoration:underline dotted}
+.person-jml{text-align:center}
+.three-actions,.manual-actions{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:7px}
+.three-actions{width:100%;box-sizing:border-box}
+.three-actions button{flex:1;min-width:0;width:0;max-width:none;padding:8px 4px;font-size:12px;box-sizing:border-box}
+.manual-actions button{min-width:48px}
+.next-input{text-align:center;font-size:12px;margin-top:5px}
+@media(max-width:600px){
+ .person-head{grid-template-columns:34px minmax(85px,1fr) minmax(120px,1fr) 34px}
+ .person-box{padding:7px 6px}
+}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="one-box-cleanup">
+/* Rapikan kotak INPUT: satu kotak, header satu baris, tombol rata 4 kolom */
+.person-box{
+  border:1px solid #cfd8d2;
+  border-radius:12px;
+  padding:9px 10px;
+  background:#fff;
+  box-sizing:border-box;
+}
+.person-head{
+  display:grid;
+  grid-template-columns:36px minmax(80px,1fr) minmax(125px,1.25fr) 38px;
+  align-items:center;
+  gap:7px;
+  min-height:30px;
+}
+.person-no,.person-jml{text-align:center;font-weight:800}
+.person-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+.person-nik{text-align:center;min-width:0}
+.person-nik .nik-copy{cursor:pointer;text-decoration:underline dotted;white-space:nowrap}
+.three-actions{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:4px !important;
+  width:100%;
+  margin-top:7px !important;
+}
+.three-actions button{
+  width:100% !important;
+  min-width:0 !important;
+  height:34px;
+  padding:4px 2px !important;
+  border-radius:8px !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+}
+/* TANDAI: tombol dibuat lebih besar dan mudah ditekan */
+.mark-person-list .person-box{padding:10px 10px}
+.mark-person-list .manual-actions{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px !important;
+  width:100%;
+  margin-top:9px !important;
+}
+.mark-person-list .manual-actions button{
+  width:100% !important;
+  min-width:0 !important;
+  height:50px !important;
+  border-radius:10px !important;
+  font-size:24px !important;
+  line-height:1 !important;
+  padding:4px !important;
+  cursor:pointer;
+}
+.mark-person-list .manual-actions .markbtn{border:1px solid #168bd1;background:#eaf7ff;color:#1677ad}
+.mark-person-list .manual-actions .cancelbtn{border:1px solid #aaa;background:#f5f5f5;color:#555}
+.mark-person-list .manual-actions .editbtn{border:1px solid #c8c8c8;background:#fff;color:#333}
+@media(max-width:600px){
+  .person-box{padding:8px 7px}
+  .person-head{grid-template-columns:30px minmax(70px,1fr) minmax(112px,1.2fr) 32px;gap:5px}
+  .person-name,.person-nik{font-size:12px}
+  .three-actions{gap:5px !important}
+  .three-actions button{height:33px;font-size:11px !important;padding:4px 1px !important}
+  .mark-person-list .manual-actions{gap:7px !important}
+  .mark-person-list .manual-actions button{height:52px !important;font-size:25px !important}
+}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="input-button-final-fix">
+/* INPUT: paksa tombol tetap di dalam kotak, tanpa lebar minimum 400px */
+#members .three-actions{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  gap:5px !important;
+  margin-top:8px !important;
+}
+#members .three-actions .mini-status{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  height:34px !important;
+  min-height:34px !important;
+  padding:4px 2px !important;
+  font-size:11px !important;
+  border-radius:7px !important;
+  white-space:nowrap !important;
+}
+@media(max-width:600px){
+  #members .three-actions{gap:4px !important}
+  #members .three-actions .mini-status{height:32px !important;min-height:32px !important;font-size:10.5px !important;padding:3px 1px !important}
+}
+.manual-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+</style>
+
+<style id="bottom-pagebar-fix">
+#bottomPagebar{margin-top:10px;padding-bottom:14px}
+</style>
+
+<style id="print-overlay-fix">
+#printOverlay{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:#fff;
+  overflow:auto;
+}
+.print-overlay-toolbar{
+  position:sticky;
+  top:0;
+  z-index:100000;
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  padding:10px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+}
+.print-overlay-toolbar button{
+  border:0;
+  border-radius:8px;
+  padding:10px 18px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+}
+.print-overlay-toolbar .do-print{background:#18b84b;color:#fff}
+.print-overlay-toolbar .do-close{background:#eee;color:#333}
+.print-overlay-content{padding:0}
+.print-overlay-content .print-preview{background:#fff;padding:10px}
+@media print{
+  body.printing-preview > *:not(#printOverlay){display:none!important}
+  #printOverlay{position:static!important;display:block!important;overflow:visible!important}
+  .print-overlay-toolbar{display:none!important}
+  .print-overlay-content{padding:0!important}
+  .print-overlay-content .print-preview{padding:0!important}
+  .print-sheet{margin:0!important;width:100%!important}
+  .print-sheet:last-child{page-break-after:auto!important;break-after:auto!important}
+  @page{size:A4 landscape;margin:8mm}
+}
+</style>
+<style id="hasanah-pdf-print-template">
+.print-head-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:9px;line-height:1.45;margin-bottom:3px}
+.print-head-left,.print-head-right{border:1px solid #222;padding:3px 5px;min-height:70px}
+.print-head-right{text-align:left}.print-head-right .head-total{text-align:center;border-top:1px solid #222;margin:3px -5px -3px;padding:2px}
+.stock-grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:7px;margin-bottom:2px}
+.stock-grid th,.stock-grid td{border:1px solid #222;text-align:center;height:14px;padding:1px}
+.stock-grid th:first-child{width:80px}.stock-grid th.day,.stock-grid td{width:20px}
+.print-grid .row-total{width:30px}.print-last-summary{border-collapse:collapse;width:100%;font-size:8px}.print-last-summary th,.print-last-summary td{border:1px solid #222;padding:3px;text-align:left}.print-last-summary th{width:90%}.print-last-summary td{text-align:center;width:10%}
+.print-note{font-size:7px;margin-top:3px}.print-page-number{text-align:center;font-size:7px;margin-top:2px}
+.print-sheet-first .print-grid,.print-sheet-middle .print-grid,.print-sheet-last .print-grid{font-size:7px}
+.print-sheet-first .print-grid th,.print-sheet-first .print-grid td,.print-sheet-middle .print-grid th,.print-sheet-middle .print-grid td,.print-sheet-last .print-grid th,.print-sheet-last .print-grid td{height:17px;padding:1px}
+.print-sheet-first .print-grid .name,.print-sheet-middle .print-grid .name,.print-sheet-last .print-grid .name{width:135px}
+.print-sheet-first .print-grid .nik,.print-sheet-middle .print-grid .nik,.print-sheet-last .print-grid .nik{width:115px}
+.print-sheet-first .print-grid .cat,.print-sheet-middle .print-grid .cat,.print-sheet-last .print-grid .cat{width:35px}
+.print-sheet-first .print-grid .day,.print-sheet-middle .print-grid .day,.print-sheet-last .print-grid .day{width:20px}
+@media print{
+  .print-sheet{page-break-after:always;break-after:page}
+  .print-sheet:last-child{page-break-after:auto;break-after:auto}
+  .print-preview{padding:0!important;background:#fff!important}
+  .print-sheet{width:100%!important;margin:0!important;padding:0!important}
+  @page{size:A4 landscape;margin:6mm}
+}
+</style>
+<meta name="app-version" content="V15"><!-- V15: duplicate-safe recap without collapsing valid same-NIK inputs -->
+</head>
+<body>
+<header><h1>DATA INPUT GAS RIAN</h1><div class="sub">Oktober 2026 • 690 NIK</div></header>
+<nav>
+<button class="active" onclick="showTab('input',this)">INPUT</button>
+<button onclick="showTab('rekap',this)">REKAP</button>
+<button onclick="showTab('tandai',this)">TANDAI</button>
+<button onclick="showTab('manual',this)">INPUT MANUAL</button>
+<button onclick="showTab('massal',this)">INPUT MASSAL</button>
+<button onclick="showTab('print',this)">PRINT</button>
+</nav>
+<main>
+<section id="input">
+  <div class="card">
+    <div style="margin-bottom:12px">
+      <div class="small" style="font-weight:800;margin-bottom:5px">BULAN</div>
+      <input id="monthPicker" type="month" value="2026-10" onchange="setMonth(this.value)" style="width:100%;box-sizing:border-box">
+    </div>
+    <div>
+      <div class="small" style="font-weight:800;margin-bottom:5px">CARI NAMA / NIK</div>
+      <input id="search" placeholder="Ketik nama atau NIK" style="width:100%;box-sizing:border-box">
+    </div>
+    <div class="small" style="font-weight:800;margin-top:10px">HALAMAN</div>
+    <div id="pagebar" class="pagebar"></div>
+    <div id="pageMarkNotice" class="page-mark-notice"></div>
+    <div class="small" id="inputInfo" style="margin-top:8px"></div>
+  </div>
+  <div id="members"></div>
+</section>
+
+<section id="rekap" class="hidden">
+  <div class="card">
+    <div class="rekap-stats" id="rekapStats"></div>
+    <div class="rekap-title">JUMLAH INPUT HARIAN</div>
+    <div class="small" style="font-weight:800;margin-top:8px">TANGGAL</div>
+    <div class="calendar-wrap"><input id="rekapCalendar" type="date" onchange="loadRecapCalendar(this.value)"></div>
+    <div id="recapBody"></div>
+  </div>
+</section>
+
+<section id="tandai" class="hidden">
+  <div class="card">
+    <div class="row">
+      <button class="action primary" onclick="showMarkMode('auto')">TANDAI OTOMATIS</button>
+      <button class="action secondary" onclick="showMarkMode('manual')">TANDAI MANUAL</button>
+    </div>
+
+    <div id="autoMarkPanel" class="hidden" style="margin-top:10px">
+      <div class="small" style="text-align:center;font-weight:800;margin-bottom:6px">JUMLAH DITANDAI</div>
+      <div class="row">
+        <input id="markCount" type="number" min="1" value="30" placeholder="Jumlah">
+        <button class="action primary" onclick="autoMark()">TANDAI</button>
+        <button class="action secondary" onclick="clearMarks()">BATAL TANDAI</button>
+      </div>
+      <div id="markInfo" class="small" style="text-align:center;margin-top:8px"></div>
+    </div>
+
+    <div id="manualMarkPanel" class="hidden" style="margin-top:10px">
+      <div class="small" style="font-weight:800">HALAMAN</div>
+      <div id="markPagebar" class="pagebar"></div>
+    </div>
+  </div>
+  <div id="markList"></div>
+</section>
+
+<section id="manual" class="hidden">
+  <div class="card">
+    <h3>INPUT MANUAL</h3>
+    <label>NOMOR NIK</label>
+    <input id="manualNik" placeholder="Masukkan NIK">
+    <label style="display:block;margin-top:8px">TANGGAL</label>
+    <input id="manualDate" type="date">
+    <div class="row" style="margin-top:10px">
+      <button class="action primary" onclick="manualInput(false)">INPUT MANUAL</button>
+      <button class="action secondary" onclick="clearManual()">BATAL INPUT</button>
+    </div>
+  </div>
+</section>
+
+<section id="massal" class="hidden">
+  <div class="card">
+    <h3>INPUT MASSAL</h3>
+    <label>NOMOR NIK</label>
+    <textarea id="massNik" rows="6" placeholder="Satu NIK per baris"></textarea>
+    <label style="display:block;margin-top:8px">TANGGAL</label>
+    <input id="massDate" type="date">
+    <div class="row" style="margin-top:10px">
+      <button class="action primary" onclick="manualInput(true)">INPUT MASSAL</button>
+      <button class="action secondary" onclick="clearMass()">BATAL INPUT</button>
+    </div>
+  </div>
+</section>
+
+<section id="print" class="hidden">
+  <div class="card">
+    <h3>PRINT</h3>
+    <div class="small">PRINT PERHALAMAN</div>
+    <div id="printPagebar" class="pagebar"></div>
+    <div class="row">
+      <button class="action primary" onclick="printPage(currentPrintPage)">PRINT HALAMAN</button>
+      <button class="action primary" onclick="printAllPages()">PRINT SEMUA HALAMAN</button>
+    </div>
+  </div>
+  <div id="printBody"></div>
+</section>
+</main>
+<div class="toast" id="toast"></div>
+
+
+<script>
+function formatWIB(value){
+  if(!value) return "-";
+  try{
+    return new Intl.DateTimeFormat("id-ID",{
+      timeZone:"Asia/Jakarta",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit",
+      hour12:false
+    }).format(new Date(value)) + " WIB";
+  }catch(e){
+    return new Date(value).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false})+" WIB";
+  }
+}
+</script>
+<script>
+const DEFAULT_SUPABASE_URL="https://dplchhyaykxkzfdebpeq.supabase.co";
+const DEFAULT_SUPABASE_KEY="sb_publishable_y-hD7ZnMoqfH0ECX0Kd1hQ_Y0QyeWXz";
+let SUPABASE_URL=localStorage.getItem("RIAN_SUPABASE_URL")||DEFAULT_SUPABASE_URL;
+let SUPABASE_KEY=localStorage.getItem("RIAN_SUPABASE_KEY")||DEFAULT_SUPABASE_KEY;
+let H={};
+function ensureConfig(){
+ SUPABASE_URL=(SUPABASE_URL||DEFAULT_SUPABASE_URL).replace(/\/rest\/v1\/?$/i,"").replace(/\/$/,"");
+ SUPABASE_KEY=SUPABASE_KEY||DEFAULT_SUPABASE_KEY;
+ localStorage.setItem("RIAN_SUPABASE_URL",SUPABASE_URL);
+ localStorage.setItem("RIAN_SUPABASE_KEY",SUPABASE_KEY);
+ return true;
+}
+
+let members=[], inputs=[], filtered=[], activeTab="input", selectedAction=null;
+
+async function api(path,opt={}){
+ H={apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY,"Content-Type":"application/json"};
+ const r=await fetch(SUPABASE_URL+path,{cache:"no-store",...opt,headers:{...H,...(opt.headers||{})}});
+ const text=await r.text();
+ if(!r.ok) throw new Error(text||(`HTTP ${r.status}`));
+ if(!text.trim()) return null;
+ try{return JSON.parse(text)}catch(e){return null}
+}
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/\'/g,"&#39;");}
+async function copyNik(nik){try{await navigator.clipboard.writeText(String(nik));toast("NIK disalin")}catch(e){const ta=document.createElement("textarea");ta.value=String(nik);document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();toast("NIK disalin")}}
+function toast(s){let t=document.getElementById("toast");t.textContent=s;t.style.display="block";setTimeout(()=>t.style.display="none",2400)}
+function fillSelect(id,arr){let e=document.getElementById(id);e.innerHTML=arr.map(x=>`<option value="${x}">${x}</option>`).join("")}
+function pageNum(v){return Number(String(v??"").replace(/[^0-9]/g,""))||0;}
+function pages(){return [...new Set(members.map(x=>pageNum(x.halaman)))].sort((a,b)=>a-b)}
+function dates(){return Array.from({length:31},(_,i)=>i+1)}
+function dbDate(d){return `${selectedYear}-${String(selectedMonth).padStart(2,"0")}-${String(Number(d)).padStart(2,"0")}`;}
+function monthOf(t){const a=String(t||"").slice(0,10).split("-");return {year:Number(a[0])||0,month:Number(a[1])||0,day:Number(a[2])||0}}
+function monthInput(x){const a=monthOf(x.tanggal);return {...x,year:a.year,month:a.month,tanggal:a.day}}
+function monthName(y,m){return new Intl.DateTimeFormat('id-ID',{month:'long'}).format(new Date(y,m-1,1));}
+function setMonth(v){if(!v)return;const a=v.split("-");selectedYear=Number(a[0]);selectedMonth=Number(a[1]);currentDate=1;document.getElementById("monthPicker").value=v;const sub=document.querySelector('header .sub');if(sub)sub.textContent=`${monthName(selectedYear,selectedMonth)} ${selectedYear} • ${members.length||690} NIK`;buildDateBar();renderMembers();renderMarks();loadRecap(1);}
+async function init(){
+ const info=document.getElementById("inputInfo");
+ try{
+  if(!ensureConfig()){info.textContent="DATABASE BELUM DIATUR";return;}
+  info.textContent="Menghubungkan ke database RIAN...";
+  let all=[];
+  for(let from=0;;from+=1000){
+   const x=await api(`/rest/v1/data_gas?select=id,halaman,no,nama,nik,ditandai&order=halaman.asc,no.asc&offset=${from}&limit=1000`);
+   if(!Array.isArray(x)) throw new Error("data_gas tidak mengembalikan daftar data");
+   all.push(...x); if(x.length<1000) break;
+  }
+  members=all.map(m=>({...m,id:m.id,halaman:pageNum(m.halaman),no:Number(m.no)||0,nik:String(m.nik??""),ditandai:!!m.ditandai}));
+  const ps=pages(); buildPageBar(ps); buildDateBar(); renderMembers(); renderMarks();
+  info.textContent=`${members.length} NIK • sedang membaca input...`;
+  const byId=new Map(members.map(m=>[String(m.id),m]));
+  let ins=[];
+  for(let from=0;;from+=1000){
+   const x=await api(`/rest/v1/input_harian?select=id,data_gas_id,tanggal,status,bulan,tahun,created_at,updated_at&order=tanggal.asc,id.asc&offset=${from}&limit=1000`);
+   if(!Array.isArray(x)) throw new Error("input_harian tidak mengembalikan daftar data");
+   ins.push(...x); if(x.length<1000) break;
+  }
+  inputs=ins.map(i=>{const m=byId.get(String(i.data_gas_id))||{}; return {id:i.id,data_gas_id:i.data_gas_id,halaman:pageNum(m.halaman),no:Number(m.no)||0,nama:m.nama||"",nik:String(m.nik??""),tanggal:Number(i.tanggal),nilai:i.status==='BISA'?'1':i.status==='PENUH'?'0':i.status==='ERROR'?'-':'',status:i.status,year:Number(i.tahun||2026),month:Number(i.bulan||10),created_at:i.created_at,updated_at:i.updated_at};});
+  renderMembers(); renderMarks(); loadRecap(currentDate);
+  const sub=document.querySelector('header .sub');if(sub)sub.textContent=`${monthName(selectedYear,selectedMonth)} ${selectedYear} • ${members.length} NIK`;
+  info.textContent=`${members.length} NIK • ${inputs.filter(x=>x.year===selectedYear&&x.month===selectedMonth&&x.nilai).length} input tersimpan • DATABASE TERHUBUNG`;
+ }catch(e){console.error("Supabase RIAN:",e);info.textContent="GAGAL DATABASE: "+(e.message||e);toast("Gagal database: "+(e.message||e));}
+}
+let selectedYear=2026, selectedMonth=10;
+let currentPage=1, currentDate=new Date().getDate(), currentMarkPage=1, currentPrintPage=1;
+
+function latestStatus(m,val){
+ const arr=inputs.filter(x=>+x.halaman===+m.halaman&&+x.no===+m.no&&x.nilai===val);
+ if(!arr.length)return null;
+ return arr.reduce((best,x)=>{
+   if(!best)return x;
+   const a=localDate(x.year,x.month,x.tanggal), b=localDate(best.year,best.month,best.tanggal);
+   return a>b?x:best;
+ },null);
+}
+function lockedStatus(m){
+ const arr=inputs.filter(x=>+x.halaman===+m.halaman&&+x.no===+m.no);
+ return arr.some(x=>x.nilai==='-') ? 'error' : '';
+}
+function hasPenuhThisMonth(m){
+ return inputs.some(x=>+x.halaman===+m.halaman&&+x.no===+m.no&&x.year===selectedYear&&x.month===selectedMonth&&x.nilai==='0');
+}
+function localDate(y,m,d){
+ return new Date(Date.UTC(Number(y),Number(m)-1,Number(d)));
+}
+function rules(m,d){
+ const cur=getVal(m,d);
+ const lock=lockedStatus(m);
+ const lastBisa=latestStatus(m,'1');
+ const targetDate=localDate(selectedYear,selectedMonth,+d);
+ const lastBisaDate=lastBisa ? localDate(lastBisa.year,lastBisa.month,lastBisa.tanggal) : null;
+ const nextAllowedDate=lastBisaDate ? localDate(lastBisa.year,lastBisa.month,lastBisa.tanggal+5) : null;
+ const bisaBlockedByGap=!!nextAllowedDate && targetDate<nextAllowedDate;
+ const hasToday=!!cur;
+ const penuh=cur==='0' || hasPenuhThisMonth(m);
+ const hasError=cur==='-' || lock==='error';
+ return {cur,lock,penuh,hasError,bisaBlockedByGap,hasToday,
+   bisaDisabled:hasToday||bisaBlockedByGap||!!lock||penuh,
+   penuhDisabled:hasToday||!!lock||penuh,
+   errorDisabled:hasToday||!!lock||penuh};
+}
+function nextBisaDate(m,d){
+ const last=latestStatus(m,'1');
+ return last ? localDate(last.year,last.month,last.tanggal+5) : null;
+}
+function nextInputText(m,d,v){
+ const r=rules(m,d);
+ if(r.penuh)return 'PENUH — NIK ini sudah dikunci dan tidak bisa diinput lagi';
+ if(r.hasError)return 'ERROR — NIK ini sudah dikunci dan tidak bisa diinput lagi';
+ if(r.cur==='1')return 'BISA — sudah diinput pada tanggal ini';
+ const next=nextBisaDate(m,d);
+ if(next){
+   const target=localDate(selectedYear,selectedMonth,+d);
+   if(target<next)return `Bisa diinput kembali ${next.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}`;
+ }
+ return '';
+}
+function actionHelp(m,d,val){
+ const r=rules(m,d);
+ if(val==='0')return 'PENUH — NIK ini terkunci untuk bulan ini';
+ if(val==='-')return 'ERROR — tidak bisa diinput sampai diperbaiki atau BATAL';
+ if(val==='1'&&r.bisaBlockedByGap){
+   const next=nextBisaDate(m,d);
+   return next?`Bisa diinput kembali ${next.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}`:'Belum dapat diinput';
+ }
+ return '';
+}
+function getVal(m,d){let x=inputs.find(i=>+i.halaman===+m.halaman&&+i.no===+m.no&&+i.tanggal===+d&&+i.month===selectedMonth&&+i.year===selectedYear);return x?.nilai||""}
+function countBisa(m){return inputs.filter(i=>i.halaman===m.halaman&&+i.no===+m.no&&i.year===selectedYear&&i.month===selectedMonth&&i.nilai==="1").length}
+function status(v){if(v==="1")return ["BISA","s1"];if(v==="0")return ["PENUH","s0"];if(v==="-")return ["ERROR","se"];return ["","sb"]}
+
+function updatePageMarkNotice(){
+ const el=document.getElementById("pageMarkNotice");
+ if(!el)return;
+ const n=members.filter(m=>m.halaman===currentPage&&m.ditandai).length;
+ el.textContent=n?`🔵 HALAMAN ${currentPage} — ${n} NIK DITANDAI`:"";
+}
+function pageHasMarked(p){
+ return members.some(m=>pageNum(m.halaman)===+p && !!m.ditandai);
+}
+function pageButtonClass(p,activePage){
+ return `${+p===+activePage?'active ':''}${pageHasMarked(p)?'marked-page':''}`.trim();
+}
+function buildPageBar(ps){
+ const html=ps.map(p=>`<button class="${pageButtonClass(p,currentPage)}" onclick="setPage('${p}')">${p}</button>`).join("");
+ const top=document.getElementById("pagebar");
+ if(top) top.innerHTML=html;
+ const bottom=document.getElementById("bottomPagebar");
+ if(bottom) bottom.innerHTML=html;
+ const mark=document.getElementById("markPagebar");
+ if(mark) mark.innerHTML=ps.map(p=>`<button class="${pageButtonClass(p,currentMarkPage)}" onclick="setMarkPage('${p}')">${p}</button>`).join("");
+ const print=document.getElementById("printPagebar");
+ if(print) print.innerHTML=ps.map(p=>`<button class="${pageButtonClass(p,currentPrintPage)}" onclick="setPrintPage('${p}')">${p}</button>`).join("");
+ updatePageMarkNotice();
+}
+function buildBottomPageBar(){
+ const el=document.getElementById("bottomPagebar");
+ if(!el)return;
+ el.innerHTML=pages().map(p=>`<button class="${pageButtonClass(p,currentPage)}" onclick="setPage('${p}');window.scrollTo({top:0,behavior:'smooth'})">${p}</button>`).join("");
+}
+function buildDateBar(){
+ let h=dates().map(d=>`<button class="${d===currentDate?'active':''}" onclick="setDate(${d})">${d}</button>`).join("");
+ const iso0=`${selectedYear}-${String(selectedMonth).padStart(2,'0')}-${String(currentDate).padStart(2,'0')}`;
+ const md=document.getElementById("manualDate"), xd=document.getElementById("massDate");
+ if(md){md.value=iso0;}
+ if(xd){xd.value=iso0;}
+ const cal=document.getElementById('rekapCalendar'); if(cal){const n=new Date(); cal.value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(currentDate).padStart(2,'0')}`;}
+}
+function setPage(p){currentPage=Number(p)||1;buildPageBar(pages());renderMembers();window.scrollTo({top:0,behavior:'smooth'})}
+function setDate(d){currentDate=+d;buildDateBar();renderMembers()}
+
+async function reloadCurrentInputs(){
+  const byId=new Map(members.map(m=>[String(m.id),m]));
+  let ins=[];
+  for(let from=0;;from+=1000){
+    const x=await api(`/rest/v1/input_harian?select=id,data_gas_id,tanggal,status,bulan,tahun,created_at,updated_at&order=tanggal.asc,id.asc&offset=${from}&limit=1000`);
+    if(!Array.isArray(x)) throw new Error("input_harian tidak mengembalikan daftar data");
+    ins.push(...x); if(x.length<1000) break;
+  }
+  inputs=ins.map(i=>{const m=byId.get(String(i.data_gas_id))||{}; return {id:i.id,data_gas_id:i.data_gas_id,halaman:pageNum(m.halaman),no:Number(m.no)||0,nama:m.nama||"",nik:String(m.nik??""),tanggal:Number(i.tanggal),nilai:i.status==='BISA'?'1':i.status==='PENUH'?'0':i.status==='ERROR'?'-':'',status:i.status,year:Number(i.tahun||2026),month:Number(i.bulan||10),created_at:i.created_at,updated_at:i.updated_at};});
+}
+async function manualInput(massal=false){
+  try{
+    const dateEl=document.getElementById(massal?"massDate":"manualDate");
+    const day=readManualDay(massal?"massDate":"manualDate");
+    const dateValue=dateEl?.value||"";
+    if(!dateValue){toast("Pilih tanggal terlebih dahulu");return;}
+    const raw=document.getElementById(massal?"massNik":"manualNik")?.value||"";
+    const niks=[...new Set(raw.split(/[\s,;]+/).map(x=>x.trim()).filter(Boolean))];
+    if(!niks.length){toast("Masukkan NIK terlebih dahulu");return;}
+    const found=[],notFound=[];
+    for(const nik of niks){const m=members.find(x=>String(x.nik).trim()===nik);if(m)found.push(m);else notFound.push(nik)}
+    if(!found.length){toast("Tidak ada NIK yang ditemukan");return;}
+
+    // Setiap NIK mendapat timestamp sendiri tepat sebelum record tersebut disimpan.
+    // Jangan gunakan satu timestamp untuk seluruh batch.
+    for(const m of found){
+      const inputTime=new Date().toISOString();
+      // Semua 690 x 31 baris sudah ada di database. Jadi untuk input manual,
+      // update BARIS YANG SUDAH ADA berdasarkan ID, bukan UPSERT.
+      const existing=inputs.find(x=>Number(x.data_gas_id)===Number(m.id)&&Number(x.tanggal)===Number(day)&&Number(x.month)===Number(selectedMonth)&&Number(x.year)===Number(selectedYear));
+      if(!existing || !existing.id) throw new Error(`Baris database untuk ${m.nik} tanggal ${day} tidak ditemukan`);
+      const res=await api(`/rest/v1/input_harian?id=eq.${encodeURIComponent(existing.id)}`,{
+        method:"PATCH",
+        headers:{Prefer:"return=representation"},
+        body:JSON.stringify({status:"BISA",updated_at:inputTime})
+      });
+      const row=Array.isArray(res)?res[0]:(res||existing);
+      if(!row || String(row.status||'')!=='BISA') throw new Error(`Database tidak mengonfirmasi BISA untuk NIK ${m.nik}`);
+      const idx=inputs.findIndex(x=>Number(x.data_gas_id)===Number(m.id)&&Number(x.tanggal)===Number(day)&&Number(x.month)===Number(selectedMonth)&&Number(x.year)===Number(selectedYear));
+      const item={id:row?.id||inputs[idx]?.id,data_gas_id:Number(m.id),halaman:Number(m.halaman),no:Number(m.no),nama:m.nama,nik:String(m.nik),tanggal:Number(day),nilai:"1",status:"BISA",year:Number(selectedYear),month:Number(selectedMonth),created_at:row?.created_at||inputs[idx]?.created_at||null,updated_at:row?.updated_at||inputTime};
+      if(idx>=0)inputs[idx]=item;else inputs.push(item);
+    }
+    // Verifikasi ulang dari database setelah semua NIK selesai disimpan.
+    await reloadCurrentInputs();
+    renderMembers();renderMarks();updateMarkInfo();loadRecap(currentDate);
+    if(massal)document.getElementById("massNik").value="";else document.getElementById("manualNik").value="";
+    const extra=notFound.length?` • ${notFound.length} NIK tidak ditemukan`:"";
+    toast(`${found.length} NIK berhasil input BISA tanggal ${day}${extra}`);
+  }catch(e){console.error("Input manual/massal RIAN:",e);toast("Gagal input: "+(e.message||e));}
+}
+
+function nextBisaDate(m,d){
+ const last=latestStatus(m,'1');
+ if(!last)return null;
+ return localDate(last.year,last.month,last.tanggal+5);
+}
+function nextInputText(m,d,v){
+ const r=rules(m,d);
+ if(r.penuh)return 'PENUH — NIK ini sudah dikunci dan tidak bisa diinput lagi';
+ if(r.hasError)return 'ERROR — NIK ini sudah dikunci dan tidak bisa diinput lagi';
+ if(r.cur==='1')return 'BISA — sudah diinput pada tanggal ini';
+ const last=latestStatus(m,'1');
+ if(last){
+   const next=nextBisaDate(m,d);
+   const target=localDate(selectedYear,selectedMonth,+d);
+   if(next&&target<next)return `Bisa diinput kembali ${next.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}`;
+ }
+ return '';
+}
+function actionHelp(m,d,val){
+ const r=rules(m,d);
+ if(val==='0')return 'PENUH — NIK ini terkunci untuk bulan ini';
+ if(val==='-')return 'ERROR — tidak bisa diinput sampai diperbaiki atau BATAL';
+ if(val==='1'&&r.bisaBlockedByGap){
+   const next=nextBisaDate(m,d);
+   return next?`Bisa diinput kembali ${next.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}`:'Belum dapat diinput';
+ }
+ return '';
+}
+
+async function save(hal,no,val){
+ const m=members.find(x=>+x.halaman===+hal&&+x.no===+no);if(!m)return;
+ const d=currentDate,r=rules(m,d);
+ if(val==="1"&&r.bisaDisabled){toast(nextInputText(m,d)||"BISA belum dapat diinput pada tanggal ini");return}
+ if(val==="-"&&r.errorDisabled){toast("Tanggal ini sudah diinput. Gunakan BATAL jika ingin membatalkan.");return}
+ if(val==="0"&&r.penuhDisabled){toast("Tanggal ini sudah diinput. Gunakan BATAL jika ingin membatalkan.");return}
+ if(r.hasToday){toast("Tanggal ini sudah diinput. Gunakan BATAL jika ingin membatalkan.");return}
+ try{
+   const status=val==="1"?"BISA":val==="0"?"PENUH":"ERROR";
+   // Timestamp dibuat tepat saat tombol untuk NIK ini ditekan.
+   const now=new Date().toISOString();
+   const existing=inputs.find(x=>Number(x.data_gas_id)===Number(m.id)&&Number(x.tanggal)===Number(d)&&Number(x.year)===Number(selectedYear)&&Number(x.month)===Number(selectedMonth));
+   if(!existing || !existing.id) throw new Error(`Baris database untuk ${m.nik} tanggal ${d} tidak ditemukan`);
+   const res=await api(`/rest/v1/input_harian?id=eq.${encodeURIComponent(existing.id)}`,{method:"PATCH",headers:{Prefer:"return=representation"},body:JSON.stringify({status,updated_at:now})});
+   const added=Array.isArray(res)?res[0]:(res||existing);
+   if(!added || String(added.status||'')!==status) throw new Error(`Database tidak mengonfirmasi ${status} untuk NIK ${m.nik}`);
+   const idx=inputs.findIndex(x=>Number(x.data_gas_id)===Number(m.id)&&Number(x.tanggal)===Number(d)&&Number(x.year)===Number(selectedYear)&&Number(x.month)===Number(selectedMonth));
+   const local={id:added?.id||existing.id,data_gas_id:Number(m.id),halaman:+hal,no:+m.no,nama:m.nama,nik:m.nik,tanggal:d,nilai:val,status,year:selectedYear,month:selectedMonth,created_at:added?.created_at||existing.created_at||null,updated_at:added?.updated_at||now};
+   if(idx>=0)inputs[idx]=local;else inputs.push(local);
+   if(m.ditandai){await api(`/rest/v1/data_gas?id=eq.${encodeURIComponent(m.id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ditandai:false})});m.ditandai=false;}
+   await reloadCurrentInputs();
+   renderMembers();renderMarks();updateMarkInfo();updatePageMarkNotice();loadRecap(currentDate);
+   toast(val==="1"?"BISA tersimpan":val==="0"?"PENUH tersimpan":"ERROR tersimpan");
+ }catch(e){console.error(e);toast("Gagal menyimpan: "+(e.message||e));}
+}
+
+async function removeInput(hal,no){
+ const d=currentDate,m=members.find(x=>+x.halaman===+hal&&+x.no===+no);if(!m)return;
+ let existing=inputs.find(x=>x.data_gas_id===m.id&&+x.tanggal===d&&x.year===selectedYear&&x.month===selectedMonth&&x.nilai);
+ if(!existing){const err=inputs.filter(x=>x.data_gas_id===m.id&&x.nilai==='-').sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));existing=err[0]||null}
+ if(!existing){toast("Tidak ada input untuk dibatalkan");return}
+ try{await api(`/rest/v1/input_harian?id=eq.${encodeURIComponent(existing.id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({status:'BELUM',updated_at:new Date().toISOString()})});existing.nilai='';existing.status='BELUM';renderMembers();renderMarks();updateMarkInfo();updatePageMarkNotice();loadRecap(currentDate);toast("Input dibatalkan")}catch(e){toast("Gagal membatalkan: "+e.message)}}
+function renderMembers(){
+ let p=currentPage,d=currentDate,q=(document.getElementById("search").value||"").toLowerCase();
+ filtered=members.filter(m=>m.halaman===p&&(((m.nik||"").toLowerCase().includes(q))||((m.nama||"").toLowerCase().includes(q))));
+ const cards=filtered.map(m=>{
+   let v=getVal(m,d),j=countBisa(m),r=rules(m,d);
+   const statusClass=r.hasError?'status-error':(r.penuh?'status-penuh':'');
+   return `<div class="person-box ${m.ditandai?'marked-row ':''}${statusClass}">` +
+     `<div class="person-head">
+       <div class="person-no">${esc(m.no)}</div>
+       <div class="person-name">${esc(m.nama)}</div>
+       <div class="person-nik"><span class="nik-copy" onclick="copyNik('${String(m.nik).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" title="Klik NIK untuk menyalin">${esc(m.nik)}</span></div>
+       <div class="person-jml"><b>${j}</b></div>
+     </div>
+     <div class="three-actions">
+       <button class="mini-status bisa ${v==='1'?'active':''}" ${r.bisaDisabled?'disabled':''} onclick="save('${m.halaman}',${m.no},'1')">BISA</button>
+       <button class="mini-status penuh ${v==='0'?'active':''}" ${r.penuhDisabled?'disabled':''} onclick="save('${m.halaman}',${m.no},'0')">PENUH</button>
+       <button class="mini-status error ${v==='-'?'active':''}" ${r.errorDisabled?'disabled':''} onclick="save('${m.halaman}',${m.no},'-')">ERROR</button>
+       <button class="mini-status batal" onclick="removeInput('${m.halaman}',${m.no})">BATAL</button>
+     </div>
+     ${(()=>{ const msg=nextInputText(m,d,v); return msg?`<div class="next-input show-help">${msg}</div>`:''; })()}
+   </div>`;
+ }).join("");
+ document.getElementById("members").innerHTML=`
+ <div class="person-list">${cards}</div>
+ <div class="small" style="font-weight:800;margin-top:12px;text-align:center">HALAMAN</div>
+ <div id="bottomPagebar" class="pagebar"></div>`;
+ buildBottomPageBar();
+}
+function showMarkMode(mode){
+  document.getElementById("autoMarkPanel").classList.toggle("hidden",mode!=="auto");
+  document.getElementById("manualMarkPanel").classList.toggle("hidden",mode!=="manual");
+  updateMarkInfo();
+  renderMarks();
+}
+function updateMarkInfo(){
+  const today=currentDate;
+  const uninput=members.filter(m=>!getVal(m,today)).length;
+  const marked=members.filter(m=>m.ditandai).length;
+  const el=document.getElementById("markInfo");
+  if(el) el.textContent=`Belum diinput tanggal ${today}: ${uninput} NIK • Sisa yang masih ditandai: ${marked} NIK`;
+}
+function renderMarks(){
+  const a=members.filter(m=>m.halaman===currentMarkPage);
+  document.getElementById("markList").innerHTML=`
+    <div class="card">
+      <div class="mark-summary">HALAMAN ${currentMarkPage} • ${a.filter(m=>m.ditandai).length} ditandai</div>
+      <div class="person-list mark-person-list">
+      ${a.map(m=>{
+        const cur=getVal(m,currentDate);
+        const mr=rules(m,currentDate);
+        const lockedStatus=!!mr.lock||mr.bisaBlockedByGap;
+        const statusClass=mr.lock==='error'?'status-error':(mr.lock==='penuh'?'status-penuh':'');
+        return `<div class="person-box ${m.ditandai?'marked-row':statusClass}">
+          <div class="person-head mark-head">
+            <div class="person-no">${esc(m.no)}</div>
+            <div class="person-name">${esc(m.nama)}</div>
+            <div class="person-nik"><span class="nik-copy">${esc(m.nik)}</span></div>
+          </div>
+          <div class="manual-actions">
+            <button class="markbtn" ${lockedStatus?'disabled':''} onclick="markOne('${escAttr(m.halaman)}',${m.no})">✅</button>
+            <button class="cancelbtn" onclick="unmarkOne('${escAttr(m.halaman)}',${m.no})">❎</button>
+            <button class="editbtn" onclick="editMember('${escAttr(m.halaman)}',${m.no})">🔄</button>
+          </div>
+        </div>`;
+      }).join("")}
+      </div>
+    </div>`;
+}
+function escAttr(v){return String(v??"").replace(/&/g,"&amp;").replace(/'/g,"\\'").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+async function markOne(hal,no){
+ try{
+   const m0=members.find(x=>+x.halaman===+hal&&+x.no===+no);
+   const cur=m0?getVal(m0,currentDate):"";
+   const rr=m0?rules(m0,currentDate):null;
+   if(rr?.lock==='penuh'){toast("PENUH — NIK ini dikunci dan tidak bisa ditandai lagi");return}
+   if(rr?.lock==='error'){toast("ERROR — NIK ini dikunci dan tidak bisa ditandai lagi");return}
+   if(rr?.penuh){toast("PENUH tidak bisa ditandai");return}
+   if(rr?.hasError){toast("ERROR tidak bisa ditandai");return}
+   if(rr?.bisaBlockedByGap){toast(nextInputText(m0,currentDate)||"Belum 5 hari sejak input BISA sebelumnya");return}
+   await api(`/rest/v1/data_gas?id=eq.${encodeURIComponent((members.find(x=>+x.halaman===+hal&&+x.no===+no)||{}).id||"")}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ditandai:true})});
+   const m=members.find(x=>+x.halaman===+hal&&+x.no===+no); if(m)m.ditandai=true;
+   renderMarks(); renderMembers(); updateMarkInfo(); updatePageMarkNotice(); toast("Ditandai");
+ }catch(e){toast("Gagal menandai: "+e.message)}
+}
+async function unmarkOne(hal,no){
+ try{
+   await api(`/rest/v1/data_gas?id=eq.${encodeURIComponent((members.find(x=>+x.halaman===+hal&&+x.no===+no)||{}).id||"")}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ditandai:false})});
+   const m=members.find(x=>+x.halaman===+hal&&+x.no===+no); if(m)m.ditandai=false;
+   renderMarks(); renderMembers(); updateMarkInfo(); updatePageMarkNotice(); toast("Tanda dibatalkan");
+ }catch(e){toast("Gagal membatalkan: "+e.message)}
+}
+async function editMember(hal,no){
+ let m=members.find(x=>+x.halaman===+hal&&+x.no===+no); if(!m)return;
+ let nama=prompt("Nama",m.nama); if(nama===null)return;
+ let nik=prompt("NIK",m.nik); if(nik===null)return;
+ try{
+   await api(`/rest/v1/data_gas?id=eq.${encodeURIComponent((members.find(x=>+x.halaman===+hal&&+x.no===+no)||{}).id||"")}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({nama:nama.trim(),nik:nik.trim()})});
+   m.nama=nama.trim();m.nik=nik.trim();
+   inputs.forEach(x=>{if(+x.halaman===+hal&&+x.no===+no){x.nama=m.nama;x.nik=m.nik}});
+   renderMarks();renderMembers();toast("Data diubah");
+ }catch(e){toast("Gagal mengubah: "+e.message)}
+}
+let recapFilter = '1';
+function setRecapFilter(v){
+  recapFilter=v;
+  document.querySelectorAll('.recap-filter button').forEach(b=>b.classList.toggle('active',b.dataset.value===v));
+  const cal=document.getElementById('rekapCalendar');
+  if(cal && cal.value) loadRecapCalendar(cal.value); else loadRecap(currentDate);
+}
+
+async function loadRecap(d){
+ d=+d;
+ const counts={b:0,p:0,e:0};
+ // Rekap kumulatif: hanya hilangkan baris yang benar-benar merupakan
+ // duplikasi penyimpanan: NIK sama, tanggal sama, status sama, dan timestamp sama.
+ // Input yang waktunya berbeda tetap dipertahankan karena merupakan input nyata.
+ const uniqueCumulative=new Map();
+ inputs.forEach(x=>{
+   if(x.year===selectedYear && x.month===selectedMonth && +x.tanggal<=d && x.nilai){
+     const nik=String(x.nik||'').trim();
+     const ts=new Date(x.updated_at||0).getTime();
+     const key=`${nik}|${x.tanggal}|${x.nilai}|${Number.isFinite(ts)?Math.floor(ts/1000):x.data_gas_id}`;
+     if(!uniqueCumulative.has(key)) uniqueCumulative.set(key,x);
+   }
+ });
+ uniqueCumulative.forEach(x=>{
+   if(x.nilai==='1') counts.b++;
+   else if(x.nilai==='0') counts.p++;
+   else if(x.nilai==='-') counts.e++;
+ });
+ const total=counts.b+counts.p+counts.e;
+ // MASIH BISA DIINPUT = jumlah NIK unik yang benar-benar masih memenuhi syarat.
+ // PENUH/ERROR satu kali saja sudah cukup untuk mengeluarkan NIK tersebut
+ // dari daftar, walaupun status itu muncul berkali-kali pada tanggal lain.
+ const masihBisaDiinput=members.filter(m=>{
+   // Gunakan aturan INPUT yang sama, termasuk jarak 5 hari lintas bulan.
+   const r=rules(m,d);
+   return !r.bisaDisabled;
+ }).length;
+ document.getElementById('rekapStats').innerHTML=`<div class="rekap-stat"><b>JML BISA</b><strong>${counts.b}</strong><span>tgl 1–${d}</span></div><div class="rekap-stat"><b>PENUH</b><strong>${counts.p}</strong><span>tgl 1–${d}</span></div><div class="rekap-stat"><b>ERROR</b><strong>${counts.e}</strong><span>tgl 1–${d}</span></div><div class="rekap-stat can-input"><b>MASIH BISA DIINPUT</b><strong>${masihBisaDiinput} NIK</strong><span>Belum ada input pada tanggal ${d} dan sudah lewat minimal 5 hari sejak BISA terakhir.</span></div>`;
+ const cal=document.getElementById('rekapCalendar');
+ if(cal){
+   const y=selectedYear, m=String(selectedMonth).padStart(2,'0'), dd=String(d).padStart(2,'0');
+   cal.value=`${y}-${m}-${dd}`;
+ }
+ // Hanya hitung input yang benar-benar tercatat pada tanggal tersebut (WIB).
+ // Ini mencegah data lama/hasil update database ikut masuk ke jumlah harian.
+ const expectedDate=`${selectedYear}-${String(selectedMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+ const dailyMap=new Map();
+ inputs.forEach(x=>{
+   if(+x.tanggal!==d || x.year!==selectedYear || x.month!==selectedMonth || x.nilai!==recapFilter || !x.updated_at) return;
+   const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(x.updated_at));
+   const y=parts.find(p=>p.type==='year')?.value, mo=parts.find(p=>p.type==='month')?.value, da=parts.find(p=>p.type==='day')?.value;
+   if(`${y}-${mo}-${da}`!==expectedDate) return;
+   // Duplikasi hanya jika NIK + status + timestamp benar-benar sama.
+   // Jadi kita tidak membuang input sah hanya karena NIK yang sama.
+   const ts=new Date(x.updated_at).getTime();
+   const key=`${String(x.nik||'').trim()}|${x.nilai}|${Number.isFinite(ts)?Math.floor(ts/1000):x.data_gas_id}`;
+   if(!dailyMap.has(key)) dailyMap.set(key,x);
+ });
+ const daily=Array.from(dailyMap.values()).sort((a,b)=>new Date(a.updated_at)-new Date(b.updated_at));
+ const rows=daily.map((x,i)=>{const ts=x.updated_at;return `<tr><td>${i+1}</td><td class="nama">${esc(x.nama)}</td><td class="nik">${esc(x.nik)}</td><td>Hal ${esc(String(x.halaman).replace(/^HAL\s*/i,''))}</td><td>${ts?formatWIB(ts):'-'}</td></tr>`}).join('');
+ const label=recapFilter==='1'?'BISA':recapFilter==='0'?'PENUH':'ERROR';
+ document.getElementById('recapBody').innerHTML=`<div class="recap-filter"><button data-value="1" class="${recapFilter==='1'?'active':''}" onclick="setRecapFilter('1')">BISA</button><button data-value="0" class="${recapFilter==='0'?'active':''}" onclick="setRecapFilter('0')">PENUH</button><button data-value="-" class="${recapFilter==='-'?'active':''}" onclick="setRecapFilter('-')">ERROR</button></div><div class="small" style="text-align:center;margin:5px 0 8px">Tanggal ${d} • ${label} • ${daily.length} data</div><div class="rekap-table-wrap"><table class="rekap-table"><tr><th>NO</th><th>NAMA</th><th>NIK</th><th>HALAMAN</th><th>WAKTU DIINPUT</th></tr>${rows||`<tr><td colspan="5">Tidak ada data ${label} pada tanggal ${d}</td></tr>`}</table></div>`;
+}
+function loadRecapCalendar(value){
+ if(!value)return;
+ const d=Number(value.slice(8,10));
+ loadRecap(d);
+}
+async function autoMark(){
+  const n=Math.max(1,Number(document.getElementById("markCount")?.value)||1);
+
+  const eligible=members.filter(m=>{
+    if(m.ditandai)return false;
+    const r=rules(m,currentDate);
+    if(r.penuh||r.hasError||r.bisaBlockedByGap)return false;
+    if(getVal(m,currentDate))return false;
+    return true;
+  });
+  if(!eligible.length){toast("Tidak ada NIK yang bisa ditandai");return}
+
+  const memberInputs=m=>inputs.filter(x=>+x.halaman===+m.halaman&&+x.no===+m.no);
+  const countAll=m=>memberInputs(m).filter(x=>x.nilai!=="").length;
+  const countBisa=m=>memberInputs(m).filter(x=>x.nilai==="1").length;
+  const lastInputDate=m=>{
+    const ds=memberInputs(m).map(x=>+x.tanggal).filter(Number.isFinite);
+    return ds.length?Math.max(...ds):0;
+  };
+
+  // Tetap mengikuti prosedur HASANAH:
+  // 1. input paling sedikit
+  // 2. BISA paling sedikit
+  // 3. input terakhir paling lama
+  // 4. jika semuanya sama, gunakan acak.
+  const byPriority=new Map();
+  for(const m of eligible){
+    const key=`${countAll(m)}|${countBisa(m)}|${lastInputDate(m)}`;
+    if(!byPriority.has(key))byPriority.set(key,[]);
+    byPriority.get(key).push(m);
+  }
+
+  // Acak kandidat yang memiliki prioritas sama.
+  const shuffle=arr=>{
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  };
+
+  // Urutkan kelompok berdasarkan prosedur prioritas, lalu acak di dalam kelompok.
+  const groups=[...byPriority.entries()].sort((a,b)=>{
+    const A=a[0].split("|").map(Number), B=b[0].split("|").map(Number);
+    return A[0]-B[0] || A[1]-B[1] || A[2]-B[2];
+  });
+  groups.forEach(g=>shuffle(g[1]));
+
+  // Ambil kandidat secara tersebar antar halaman.
+  // Halaman diputar mulai dari titik acak agar tidak selalu mulai Hal 1.
+  const pageMap=new Map();
+  for(const g of groups){
+    for(const m of g[1]){
+      if(!pageMap.has(m.halaman))pageMap.set(m.halaman,[]);
+      pageMap.get(m.halaman).push(m);
+    }
+  }
+  const pages=[...pageMap.keys()].sort((a,b)=>+a-+b);
+  const start=Math.floor(Math.random()*pages.length);
+  const rotated=pages.slice(start).concat(pages.slice(0,start));
+
+  const ordered=[];
+  let remaining=true, round=0;
+  while(remaining){
+    remaining=false;
+    const roundPages=shuffle(rotated.slice());
+    for(const pg of roundPages){
+      const arr=pageMap.get(pg)||[];
+      if(arr[round]){
+        ordered.push(arr[round]);
+        remaining=true;
+      }
+    }
+    round++;
+  }
+
+  // Jika prioritas sangat berbeda, tetap prioritaskan kelompok lebih tinggi.
+  // Kandidat final dipilih dari ordered; tidak lagi berdasarkan nomor NIK.
+  const pick=ordered.slice(0,n);
+
+  let ok=0,gagal=0;
+  const gagalNama=[];
+  for(const m of pick){
+    if(m.ditandai||getVal(m,currentDate))continue;
+    const r=rules(m,currentDate);
+    if(r.penuh||r.hasError||r.bisaBlockedByGap)continue;
+    try{
+      await api(`/rest/v1/data_gas?id=eq.${encodeURIComponent(m.id)}`,{
+        method:"PATCH",
+        headers:{Prefer:"return=minimal"},
+        body:JSON.stringify({ditandai:true})
+      });
+      m.ditandai=true;
+      ok++;
+    }catch(e){
+      gagal++;
+      if(gagalNama.length<3)gagalNama.push(m.nama);
+    }
+  }
+
+  renderMarks();renderMembers();updateMarkInfo();updatePageMarkNotice();
+  if(gagal){
+    toast(`${ok} NIK ditandai • ${gagal} gagal${gagalNama.length?" • "+gagalNama.join(", "):""}`);
+  }else{
+    toast(`${ok} NIK ditandai secara acak`);
+  }
+}
+
+async function clearMarks(){try{await api(`/rest/v1/data_gas?ditandai=eq.true`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ditandai:false})});members.forEach(m=>m.ditandai=false);renderMarks();renderMembers();toast("Semua tandai dibatalkan")}catch(e){toast("Gagal: "+e.message)}}
+function showTab(t,b){activeTab=t;document.querySelectorAll("main>section").forEach(x=>x.classList.add("hidden"));document.getElementById(t).classList.remove("hidden");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");if(t==="tandai")renderMarks();if(t==="rekap")loadRecap(currentDate);if(t==="print")loadPrint()}
+function printCellFor(page,no,d){
+  const x=inputs.find(i=>+i.halaman===+page&&+i.no===+no&&+i.tanggal===d&&i.year===selectedYear&&i.month===selectedMonth);
+  return x&&x.nilai==='1' ? '<span class="print-check">✓</span>' : '';
+}
+function printRows(page){
+  const a=members.filter(m=>+m.halaman===+page).sort((x,y)=>+x.no-+y.no);
+  const days=Array.from({length:31},(_,i)=>i+1);
+  return a.map(m=>{
+    const cells=days.map(d=>`<td>${printCellFor(page,m.no,d)}</td>`).join('');
+    const total=days.reduce((n,d)=>n+(printCellFor(page,m.no,d)?1:0),0);
+    return `<tr><td class="no">${esc(m.no)}</td><td class="name left">${esc(m.nama||'')}</td><td class="nik">${esc(m.nik||'')}</td><td class="cat">RT</td>${cells}<td class="row-total">${total}</td></tr>`;
+  }).join('');
+}
+function printDayHeaders(){
+  const days=Array.from({length:31},(_,i)=>i+1);
+  return days.map(d=>`<th class="day">${d}</th>`).join('');
+}
+function printDayTotals(page){
+  const days=Array.from({length:31},(_,i)=>i+1);
+  return days.map(d=>{
+    const n=inputs.filter(i=>+i.halaman===+page&&+i.tanggal===d&&i.year===selectedYear&&i.month===selectedMonth&&i.nilai==='1').length;
+    return `<th>${n}</th>`;
+  }).join('');
+}
+function printBaseTable(page,footerHtml=''){
+  return `<table class="print-grid"><thead>
+    <tr><th class="no">No</th><th class="name">Nama Pembeli</th><th class="nik">NIK Pembeli</th><th class="cat">Kategori</th>${printDayHeaders()}<th class="row-total">Total</th></tr>
+  </thead><tbody>${printRows(page)}</tbody><tfoot><tr><th colspan="4">TOTAL</th>${printDayTotals(page)}<th>${inputs.filter(i=>+i.halaman===+page&&i.year===selectedYear&&i.month===selectedMonth&&i.nilai==='1').length}</th></tr></tfoot></table>${footerHtml}`;
+}
+function printPage1(page){
+  return `<div class="print-sheet print-sheet-first">
+    <div class="print-title">CATATAN PENJUALAN HARIAN PANGKALAN LPG 3KG</div>
+    <div class="print-head-wrap">
+      <div class="print-head-left">
+        <div><b>Nama Pangkalan</b> : RIAN</div>
+        <div><b>No. Reg Pangkalan</b> : ____________________</div>
+        <div><b>Alamat</b> : ________________________________</div>
+        <div><b>MID LPG MAP</b> : ____________________________</div>
+        <div><b>Nama Agen Penyuplai</b> : PT. SUMITA DAYA KELOLA</div>
+        <div><b>Bulan</b> : ${monthName(selectedYear,selectedMonth).toUpperCase()} ${selectedYear}</div>
+      </div>
+      <div class="print-head-right">
+        <div><b>Jumlah Nama Pembeli</b> : 690</div>
+        <div><b>RT</b> : ____________ &nbsp;&nbsp; <b>UM</b> : ____________ &nbsp;&nbsp; <b>TOTAL</b> : ____________</div>
+        <div>Rumah Tangga : ................................................ tbg</div>
+        <div>Usaha Mikro &nbsp;&nbsp;: ................................................ tbg</div>
+        <div class="head-total"><b>TOTAL</b> : ........................................ tbg</div>
+      </div>
+    </div>
+    <table class="stock-grid"><tr><th>TANGGAL</th>${printDayHeaders()}<th>Total</th></tr><tr><th>Stok Awal</th>${Array(31).fill('<td></td>').join('')}<td></td></tr><tr><th>Penerimaan</th>${Array(31).fill('<td></td>').join('')}<td></td></tr></table>
+    ${printBaseTable(page)}
+    <div class="print-page-number">Halaman 1</div>
+  </div>`;
+}
+function printMiddlePage(page){
+  return `<div class="print-sheet print-sheet-middle">
+    ${printBaseTable(page)}
+    <div class="print-page-number">Halaman ${page}</div>
+  </div>`;
+}
+function printPage28(page){
+  const total=inputs.filter(i=>+i.halaman===+page&&i.year===selectedYear&&i.month===selectedMonth&&i.nilai==='1').length;
+  return `<div class="print-sheet print-sheet-last">
+    ${printBaseTable(page,`<table class="print-last-summary"><tr><th>TOTAL PENJUALAN</th><td>${total}</td></tr><tr><th>Stok Akhir</th><td></td></tr><tr><th>Tabung Kosong</th><td></td></tr></table><div class="print-note"><b>Keterangan</b><br>NIK : Nomor Induk Kependudukan</div>`)}
+    <div class="print-page-number">Halaman 28</div>
+  </div>`;
+}
+function printSheetForPage(page){
+  page=Number(String(page).replace(/^HAL\s*/i,''))||1;
+  if(page===1)return printPage1(page);
+  if(page===28)return printPage28(page);
+  return printMiddlePage(page);
+}
+function loadPrint(){document.getElementById("printBody").innerHTML=`<div class="print-preview">${printSheetForPage(currentPrintPage)}</div>`}
+function openPrintWindow(html){
+  try{
+    let old=document.getElementById("printOverlay");
+    if(old) old.remove();
+    const overlay=document.createElement("div");
+    overlay.id="printOverlay";
+    overlay.innerHTML=`
+      <div class="print-overlay-toolbar">
+        <button class="do-print" type="button" onclick="window.print()">🖨️ CETAK / PRINT</button>
+        <button class="do-close" type="button" onclick="closePrintOverlay()">KEMBALI</button>
+      </div>
+      <div class="print-overlay-content"><div class="print-preview">${html}</div></div>`;
+    document.body.appendChild(overlay);
+    document.body.classList.add("printing-preview");
+    window.scrollTo({top:0,behavior:"auto"});
+  }catch(e){toast("Menu cetak tidak tersedia: "+e.message);}
+}
+function closePrintOverlay(){
+  const o=document.getElementById("printOverlay");
+  if(o)o.remove();
+  document.body.classList.remove("printing-preview");
+}
+function printPage(page){
+  currentPrintPage=Number(page)||1;
+  buildPageBar(pages());
+  loadPrint();
+  openPrintWindow(printSheetForPage(currentPrintPage));
+}
+function printAllPages(){
+  const sheets=pages().map(p=>printSheetForPage(p)).join('');
+  document.getElementById("printBody").innerHTML=`<div class="print-preview">${sheets}</div>`;
+  openPrintWindow(sheets);
+}
+
+document.getElementById("search").addEventListener("input",renderMembers);
+init();
+</script>
+</body>
+</html>
